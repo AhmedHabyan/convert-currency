@@ -25,6 +25,7 @@
             >
 
             <AutoCompleteTextView
+                android:id="@+id/auto_complete_from"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="none"
@@ -51,6 +52,7 @@
             >
 
             <AutoCompleteTextView
+                android:id="@+id/auto_complete_to"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
@@ -64,7 +66,7 @@
         android:id="@+id/btn_swap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
 
         android:text="swap"
         app:layout_constraintEnd_toEndOf="parent"
@@ -86,7 +88,9 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Amount" />
+            android:hint="Amount"
+            android:inputType="number"
+            />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -103,7 +107,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="converted value" />
+            android:hint="converted value"
+            android:enabled="false"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
