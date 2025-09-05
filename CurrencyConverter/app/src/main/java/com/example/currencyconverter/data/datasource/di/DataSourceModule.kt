@@ -1,9 +1,9 @@
 package com.example.currencyconverter.data.datasource.di
 
 import com.example.currencyconverter.data.datasource.RemoteDataSource
-import com.example.currencyconverter.data.datasource.RepoDataSourceImpl
+import com.example.currencyconverter.data.datasource.RepoImpl
 import com.example.currencyconverter.data.network.webservice.WebService
-import com.example.currencyconverter.domain.contract.repo.RepoDataSoruce
+import com.example.currencyconverter.domain.contract.repo.Repo
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,8 +19,8 @@ object DataSourceModule {
     @Singleton
     fun provideRepoDataSource(
         remoteDataSource: RemoteDataSource
-    ):RepoDataSoruce{
-        return RepoDataSourceImpl(
+    ):Repo{
+        return RepoImpl(
             remoteDataSource
         )
     }
