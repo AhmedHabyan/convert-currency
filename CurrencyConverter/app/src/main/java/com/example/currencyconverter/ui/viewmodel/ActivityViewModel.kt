@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.currencyconverter.data.utils.ApiResult
 import com.example.currencyconverter.domain.contract.repo.Repo
 import com.example.currencyconverter.domain.model.CurrencyConversionDto
+import com.example.currencyconverter.domain.model.TransactionDto
 import com.example.currencyconverter.ui.utils.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -68,4 +69,12 @@ class ActivityViewModel @Inject constructor(
             converterUiState.value = UiState.Success(result)
         }
     }
+
+
+    fun insertTransaction(transactionDto: TransactionDto){
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.insertTransaction(transactionDto)
+        }
+    }
+
 }

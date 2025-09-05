@@ -14,6 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.FragmentConverterBinding
 import com.example.currencyconverter.domain.model.CurrencyDto
+import com.example.currencyconverter.domain.model.TransactionDto
 import com.example.currencyconverter.ui.utils.UiState
 import com.example.currencyconverter.ui.utils.clearVisiblity
 import com.example.currencyconverter.ui.utils.setVisiblity
@@ -165,6 +166,13 @@ class ConverterFragment : Fragment() {
                             binding.converterProgressBar.clearVisiblity()
 
                             binding.convertedEditText.setText((it.response as Double).toString())
+
+                            viewModel.insertTransaction(
+                                TransactionDto(
+                                    amountFrom = "${binding.amountEditText.text} ${binding.autoCompleteFrom.text}",
+                                    amountTo = "${binding.convertedEditText.text} ${binding.autoCompleteTo.text}"
+                                )
+                            )
 
                         }
                     }
