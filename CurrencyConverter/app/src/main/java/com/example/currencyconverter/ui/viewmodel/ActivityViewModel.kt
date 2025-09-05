@@ -1,12 +1,11 @@
 package com.example.currencyconverter.ui.viewmodel
 
-import android.util.Log
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.currencyconverter.data.utils.ApiResult
 import com.example.currencyconverter.domain.contract.repo.Repo
 import com.example.currencyconverter.domain.model.CurrencyConversionDto
-import com.example.currencyconverter.ui.utils.UiEventType
 import com.example.currencyconverter.ui.utils.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -45,7 +44,6 @@ class ActivityViewModel @Inject constructor(
     }
 
     fun calculateAmountConversion(base:String, symbol:String,amount:String){
-        Log.e("calculate","yes")
         viewModelScope.launch(Dispatchers.IO) {
             repo.getCurrencyConversion(
                 base, symbol
@@ -55,11 +53,9 @@ class ActivityViewModel @Inject constructor(
                         converterUiState.value = UiState.Error(it.error)
                     }
                     is ApiResult.Loading -> {
-                        Log.e("calculate","Loading")
                         converterUiState.value = UiState.Loading
                     }
                     is ApiResult.Success -> {
-                        Log.e("calculate","success")
                         calculateConversion(it.response,amount)
                     }
                 }

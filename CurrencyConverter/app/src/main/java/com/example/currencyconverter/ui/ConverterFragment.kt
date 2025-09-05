@@ -71,19 +71,19 @@ class ConverterFragment : Fragment() {
     private fun isValidFields(): Boolean {
         var isValid = true
         if(binding.amountEditText.text.isNullOrEmpty()){
-            binding.textInputLayoutEditTextAmount.error = "this field is required"
+            binding.textInputLayoutEditTextAmount.error = Constants.ERROR_FIELD_REQUIRED
             isValid=false
         }
         else if(binding.amountEditText.text.toString().toInt() <= 0){
-            binding.textInputLayoutEditTextAmount.error = "this field is must bebetween 1 or more"
+            binding.textInputLayoutEditTextAmount.error = Constants.ERROR_INPUT_RANGE
             isValid=false
         }
         if(binding.textInputLayoutFrom.editText?.text.isNullOrEmpty() ){
-            binding.textInputLayoutFrom.error ="this field is required"
+            binding.textInputLayoutFrom.error =Constants.ERROR_FIELD_REQUIRED
             isValid=false
         }
         if(binding.textInputLayoutTo.editText?.text.isNullOrEmpty()){
-            binding.textInputLayoutTo.error ="this field is required"
+            binding.textInputLayoutTo.error =Constants.ERROR_FIELD_REQUIRED
             isValid=false
         }
         if(isValid) {
@@ -102,16 +102,16 @@ class ConverterFragment : Fragment() {
                         is UiState.Error -> {
                             showErrorDialog(
                                 context = requireContext(),
-                                message = it.exception.message ?: "something went wrong",
+                                message = it.exception.message ?: Constants.GENERAL_ERROR,
                                 onPositiveButtonClicked = { dialog, _ ->
                                     dialog?.dismiss()
                                     viewModel.getAllCurrencies()
                                 },
-                                positiveButtonText = "refresh",
+                                positiveButtonText = Constants.REFRESH,
                                 onNegativeButtonClicked = { dialog, _ ->
                                     dialog?.dismiss()
                                 },
-                                negativeButtonText = "cancel"
+                                negativeButtonText = Constants.CANCEL
 
                             )
                             binding.progressBar.clearVisiblity()
@@ -141,16 +141,16 @@ class ConverterFragment : Fragment() {
                         is UiState.Error -> {
                             showErrorDialog(
                                 context = requireContext(),
-                                message = it.exception.message ?: "something went wrong",
+                                message = it.exception.message ?: Constants.GENERAL_ERROR,
                                 onPositiveButtonClicked = { dialog, _ ->
                                     resetFields()
                                     dialog?.dismiss()
                                 },
-                                positiveButtonText = "ok",
+                                positiveButtonText = Constants.OK,
                                 onNegativeButtonClicked = { dialog, _ ->
                                     dialog?.dismiss()
                                 },
-                                negativeButtonText = "cancel"
+                                negativeButtonText = Constants.CANCEL
 
                             )
                             binding.converterProgressBar.clearVisiblity()
@@ -158,12 +158,10 @@ class ConverterFragment : Fragment() {
 
                         is UiState.Ideal -> {}
                         is UiState.Loading -> {
-                            Log.e("converter", "Loading")
                             binding.converterProgressBar.setVisiblity()
                         }
 
                         is UiState.Success<*> -> {
-                            Log.e("converter", "success ${it.response}")
                             binding.converterProgressBar.clearVisiblity()
 
                             binding.convertedEditText.setText((it.response as Double).toString())
