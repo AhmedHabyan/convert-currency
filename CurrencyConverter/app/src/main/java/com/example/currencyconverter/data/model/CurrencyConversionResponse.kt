@@ -21,8 +21,9 @@ data class CurrencyConversionResponse(
 	val base: String? = null
 ){
 	fun toCurrencyConversionDto():CurrencyConversionDto{
+
 		return CurrencyConversionDto(
-			conversionAmount = rates
+			conversionAmount = rates?.values?.first()
 		)
 	}
 }

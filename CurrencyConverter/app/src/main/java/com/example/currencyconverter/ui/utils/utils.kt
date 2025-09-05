@@ -19,16 +19,18 @@ fun View.clearVisiblity(){
 fun showErrorDialog(
     context: Context,
     onPositiveButtonClicked:(dialogInterface:DialogInterface?,p1:Int)->Unit,
+    positiveButtonText:String,
+    negativeButtonText:String,
     onNegativeButtonClicked:(dialogInterface:DialogInterface?,p1:Int)->Unit,
     message: String) {
     AlertDialog.Builder(context) // use "requireContext()" if inside Fragment
         .setTitle("Error")
         .setMessage(message)
-        .setPositiveButton("refresh"){p0,p1->
+        .setPositiveButton(positiveButtonText){p0,p1->
             onPositiveButtonClicked(p0,p1)
 
         }
-        .setNegativeButton("cancel"){p0,p1->
+        .setNegativeButton(negativeButtonText){p0,p1->
             onNegativeButtonClicked(p0,p1)
         }
         .setCancelable(true)

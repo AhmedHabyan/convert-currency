@@ -1,14 +1,12 @@
 package com.example.currencyconverter.ui
 
-import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -53,8 +51,47 @@ class ConverterFragment : Fragment() {
         observeData()
 
         onSwapClicked()
+        onConvertClicked()
 
 
+    }
+
+    private fun onConvertClicked() {
+        binding.btnConvert.setOnClickListener{
+            if(isValidFields()){
+                viewModel.calculateAmountConversion(
+                    base = binding.autoCompleteFrom.text.toString(),
+                    symbol = binding.autoCompleteTo.text.toString(),
+                    amount = binding.amountEditText.text.toString()
+                )
+            }
+        }
+    }
+
+    private fun isValidFields(): Boolean {
+        var isValid = true
+        if(binding.amountEditText.text.isNullOrEmpty()){
+            binding.textInputLayoutEditTextAmount.error = "this field is required"
+            isValid=false
+        }
+        else if(binding.amountEditText.text.toString().toInt() <= 0){
+            binding.textInputLayoutEditTextAmount.error = "this field is must bebetween 1 or more"
+            isValid=false
+        }
+        if(binding.textInputLayoutFrom.editText?.text.isNullOrEmpty() ){
+            binding.textInputLayoutFrom.error ="this field is required"
+            isValid=false
+        }
+        if(binding.textInputLayoutTo.editText?.text.isNullOrEmpty()){
+            binding.textInputLayoutTo.error ="this field is required"
+            isValid=false
+        }
+        if(isValid) {
+            binding.textInputLayoutEditTextAmount.error = null
+            binding.textInputLayoutFrom.error = null
+            binding.textInputLayoutTo.error = null
+        }
+        return isValid
     }
 
     private fun observeData() {
@@ -70,22 +107,66 @@ class ConverterFragment : Fragment() {
                                     dialog?.dismiss()
                                     viewModel.getAllCurrencies()
                                 },
+                                positiveButtonText = "refresh",
                                 onNegativeButtonClicked = { dialog, _ ->
                                     dialog?.dismiss()
                                 },
+                                negativeButtonText = "cancel"
 
                             )
                             binding.progressBar.clearVisiblity()
                         }
                         is UiState.Ideal -> {}
                         is UiState.Loading -> {
+                            binding.converterProgressBar.clearVisiblity()
                             binding.progressBar.setVisiblity()
                         }
-                        is UiState.Success -> {
+                        is UiState.Success<*> -> {
                             binding.constraintLayoutConverterDesign.setVisiblity()
                             binding.progressBar.clearVisiblity()
 
-                            setItemsAdapter(it.response)
+                            it.response?.let { it1 -> setItemsAdapter(it1) }
+
+                        }
+                    }
+                }
+            }
+
+
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.converterUiState.collect {
+                    when (it) {
+                        is UiState.Error -> {
+                            showErrorDialog(
+                                context = requireContext(),
+                                message = it.exception.message ?: "something went wrong",
+                                onPositiveButtonClicked = { dialog, _ ->
+                                    resetFields()
+                                    dialog?.dismiss()
+                                },
+                                positiveButtonText = "ok",
+                                onNegativeButtonClicked = { dialog, _ ->
+                                    dialog?.dismiss()
+                                },
+                                negativeButtonText = "cancel"
+
+                            )
+                            binding.converterProgressBar.clearVisiblity()
+                        }
+
+                        is UiState.Ideal -> {}
+                        is UiState.Loading -> {
+                            Log.e("converter", "Loading")
+                            binding.converterProgressBar.setVisiblity()
+                        }
+
+                        is UiState.Success<*> -> {
+                            Log.e("converter", "success ${it.response}")
+                            binding.converterProgressBar.clearVisiblity()
+
+                            binding.convertedEditText.setText((it.response as Double).toString())
 
                         }
                     }
@@ -94,7 +175,9 @@ class ConverterFragment : Fragment() {
         }
     }
 
-
+private fun resetFields(){
+    binding.convertedEditText.setText("")
+}
     private fun setItemsAdapter(response:Any) {
         if(response is CurrencyDto) {
             response.currencies?.let { adapterItem?.addAll(it) }

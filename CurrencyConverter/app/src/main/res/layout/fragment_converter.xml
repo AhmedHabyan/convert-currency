@@ -9,10 +9,10 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint_layout_converter_design"
-
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        >
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_view_from"
@@ -25,6 +25,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_layout_from"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,6 +53,7 @@
             >
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_layout_to"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -92,6 +94,7 @@
             app:layout_constraintTop_toBottomOf="@id/btn_swap">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/amount_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Amount"
@@ -110,6 +113,7 @@
             >
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/converted_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
@@ -117,6 +121,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
+            android:id="@+id/btn_convert"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -126,6 +131,15 @@
             app:layout_constraintTop_toBottomOf="@id/text_input_layout_edit_converted_amount" />
 
 
+        <ProgressBar
+            android:id="@+id/converter_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/btn_convert"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <LinearLayout
         android:id="@+id/linear_layout_progress_bar"
