@@ -11,7 +11,9 @@ import com.example.currencyconverter.domain.model.CurrencyConversionDto
 import com.example.currencyconverter.domain.model.CurrencyDto
 import com.example.currencyconverter.domain.model.TransactionDto
 import jakarta.inject.Inject
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.debounce
 
 class RepoImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
@@ -21,6 +23,7 @@ class RepoImpl @Inject constructor(
         return  safeCallApi { remoteDataSource.getAllCurrencies().toCurrencyDto()}
     }
 
+    @OptIn(FlowPreview::class)
     override suspend fun getCurrencyConversion(
         base:String,
         symbol:String

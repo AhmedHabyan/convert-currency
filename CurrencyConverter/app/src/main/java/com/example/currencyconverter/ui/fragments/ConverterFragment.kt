@@ -1,6 +1,8 @@
-package com.example.currencyconverter.ui
+package com.example.currencyconverter.ui.fragments
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,6 +17,7 @@ import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.FragmentConverterBinding
 import com.example.currencyconverter.domain.model.CurrencyDto
 import com.example.currencyconverter.domain.model.TransactionDto
+import com.example.currencyconverter.ui.Constants
 import com.example.currencyconverter.ui.utils.UiState
 import com.example.currencyconverter.ui.utils.clearVisiblity
 import com.example.currencyconverter.ui.utils.setVisiblity
@@ -47,53 +50,57 @@ class ConverterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initDropDown()
+
+        viewModel.calculateAmountConversion(
+            base = Constants.EUR,
+            symbol = Constants.AFN,
+            amount = binding.amountEditText.text.toString()
+        )
+
         viewModel.getAllCurrencies()
+
+
 
         observeData()
 
         onSwapClicked()
-        onConvertClicked()
+
+        onAmountEditTextChanged()
+
+
+
 
 
     }
 
-    private fun onConvertClicked() {
-        binding.btnConvert.setOnClickListener{
-            if(isValidFields()){
-                viewModel.calculateAmountConversion(
-                    base = binding.autoCompleteFrom.text.toString(),
-                    symbol = binding.autoCompleteTo.text.toString(),
-                    amount = binding.amountEditText.text.toString()
-                )
+    private fun onAmountEditTextChanged() {
+        binding.amountEditText.addTextChangedListener(
+            object :TextWatcher{
+                override fun afterTextChanged(p0: Editable?) {
+                    if(!p0.isNullOrEmpty()) {
+                        viewModel.calculateAmountConversion(
+                            base = binding.autoCompleteFrom.text.toString(),
+                            symbol = binding.autoCompleteTo.text.toString(),
+                            amount = p0.toString()
+                        )
+                    }
+                }
+
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                }
+
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+
+                }
             }
-        }
+        )
     }
 
-    private fun isValidFields(): Boolean {
-        var isValid = true
-        if(binding.amountEditText.text.isNullOrEmpty()){
-            binding.textInputLayoutEditTextAmount.error = Constants.ERROR_FIELD_REQUIRED
-            isValid=false
-        }
-        else if(binding.amountEditText.text.toString().toInt() <= 0){
-            binding.textInputLayoutEditTextAmount.error = Constants.ERROR_INPUT_RANGE
-            isValid=false
-        }
-        if(binding.textInputLayoutFrom.editText?.text.isNullOrEmpty() ){
-            binding.textInputLayoutFrom.error =Constants.ERROR_FIELD_REQUIRED
-            isValid=false
-        }
-        if(binding.textInputLayoutTo.editText?.text.isNullOrEmpty()){
-            binding.textInputLayoutTo.error =Constants.ERROR_FIELD_REQUIRED
-            isValid=false
-        }
-        if(isValid) {
-            binding.textInputLayoutEditTextAmount.error = null
-            binding.textInputLayoutFrom.error = null
-            binding.textInputLayoutTo.error = null
-        }
-        return isValid
-    }
+
+
+
 
     private fun observeData() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -125,6 +132,8 @@ class ConverterFragment : Fragment() {
                         is UiState.Success<*> -> {
                             binding.constraintLayoutConverterDesign.setVisiblity()
                             binding.progressBar.clearVisiblity()
+
+
 
                             it.response?.let { it1 -> setItemsAdapter(it1) }
 
@@ -173,15 +182,10 @@ class ConverterFragment : Fragment() {
                         is UiState.Success<*> -> {
                             binding.converterProgressBar.clearVisiblity()
 
-                            binding.convertedEditText.setText((it.response as Double).toString())
+                            showConvertedText((it.response as Double).toString())
 
-                            viewModel.insertTransaction(
-                                TransactionDto(
-                                    amountFrom = "${binding.amountEditText.text} ${binding.autoCompleteFrom.text}",
-                                    amountTo = "${binding.convertedEditText.text} ${binding.autoCompleteTo.text}",
-                                    status = Constants.SUCCESS
-                                )
-                            )
+                            insertTransaction()
+
 
                         }
                     }
@@ -190,12 +194,35 @@ class ConverterFragment : Fragment() {
         }
     }
 
-private fun resetFields(){
+    private fun insertTransaction() {
+        if(binding.amountEditText.text?.isNotEmpty() == true) {
+            viewModel.insertTransaction(
+                TransactionDto(
+                    amountFrom = "${binding.amountEditText.text} ${binding.autoCompleteFrom.text}",
+                    amountTo = "${binding.convertedEditText.text} ${binding.autoCompleteTo.text}",
+                    status = Constants.SUCCESS
+                )
+            )
+        }
+    }
+
+    private fun showConvertedText(convertedText:String) {
+        if(binding.amountEditText.text?.isEmpty() == true){
+            binding.convertedEditText.setText("")
+        }
+        else {
+            binding.convertedEditText.setText(convertedText)
+        }
+    }
+
+    private fun resetFields(){
     binding.convertedEditText.setText("")
 }
     private fun setItemsAdapter(response:Any) {
         if(response is CurrencyDto) {
             response.currencies?.let { adapterItem?.addAll(it) }
+            binding.autoCompleteFrom.setText(response.currencies?.get(47),false) // EUR
+            binding.autoCompleteTo.setText(response.currencies?.get(1),false) // AFN
         }
     }
 

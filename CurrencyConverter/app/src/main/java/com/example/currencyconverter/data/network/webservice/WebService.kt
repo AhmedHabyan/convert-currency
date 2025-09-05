@@ -9,14 +9,14 @@ interface WebService {
 
     @GET("latest")
     suspend fun getCurrencyConversion(
-        @Query("access_key") apiKey:String= "9965ba56a58a4d451edc48153ac3b8fd",
+        @Query("access_key") apiKey:String= "4d2377652b476253aa9818b9863f8386",
         @Query("base") base:String,
         @Query("symbols") symbol:String
     ): CurrencyConversionResponse
 
     @GET("symbols")
     suspend fun getAllCurrencies(
-        @Query("access_key") apiKey:String= "9965ba56a58a4d451edc48153ac3b8fd"
+        @Query("access_key") apiKey:String= "4d2377652b476253aa9818b9863f8386"
     ):CurrencyResponse
 
 }

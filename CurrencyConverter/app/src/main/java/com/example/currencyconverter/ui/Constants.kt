@@ -14,4 +14,7 @@ object Constants {
 
     const val SUCCESS = "success"
     const val FAIL = "fail"
+
+    const val EUR= "EUR"
+    const val AFN = "AFN"
 }

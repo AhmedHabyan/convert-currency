@@ -1,6 +1,7 @@
 package com.example.currencyconverter.ui.viewmodel
 
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.currencyconverter.data.utils.ApiResult
@@ -11,7 +12,11 @@ import com.example.currencyconverter.ui.utils.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -43,9 +48,12 @@ class ActivityViewModel @Inject constructor(
             }
         }
     }
+    var job:Job?=null
+    fun calculateAmountConversion(base:String, symbol:String, amount:String){
 
-    fun calculateAmountConversion(base:String, symbol:String,amount:String){
-        viewModelScope.launch(Dispatchers.IO) {
+        job?.cancel()
+        job = viewModelScope.launch(Dispatchers.IO) {
+            delay(600)
             repo.getCurrencyConversion(
                 base, symbol
             ).collect {
@@ -62,6 +70,7 @@ class ActivityViewModel @Inject constructor(
                 }
             }
         }
+
     }
     fun calculateConversion(currencyConversionDto: CurrencyConversionDto,amount:String) {
         currencyConversionDto.conversionAmount?.let {
@@ -72,6 +81,7 @@ class ActivityViewModel @Inject constructor(
 
 
     fun insertTransaction(transactionDto: TransactionDto){
+        Log.e("transaction insert","yes")
         viewModelScope.launch(Dispatchers.IO) {
             repo.insertTransaction(transactionDto)
         }
