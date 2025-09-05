@@ -1,16 +1,18 @@
 package com.example.currencyconverter.data.datasource
 
+import android.util.Log
 import com.example.currencyconverter.data.utils.ApiResult
 import com.example.currencyconverter.data.utils.safeCallApi
-import com.example.currencyconverter.domain.contract.repo.RepoDataSoruce
+import com.example.currencyconverter.domain.contract.repo.Repo
 import com.example.currencyconverter.domain.model.CurrencyDto
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
-class RepoDataSourceImpl @Inject constructor(
+class RepoImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
-):RepoDataSoruce {
+):Repo {
     override suspend fun getAllCurrencies(): Flow<ApiResult<CurrencyDto>> {
-        return  remoteDataSource.getAllCurrencies()
+        Log.e("me","yes2")
+        return  safeCallApi { remoteDataSource.getAllCurrencies().toCurrentDto()}
     }
 }

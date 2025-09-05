@@ -5,7 +5,7 @@ import com.example.currencyconverter.domain.model.CurrencyConversionDto
 import com.example.currencyconverter.domain.model.CurrencyDto
 import kotlinx.coroutines.flow.Flow
 
-interface RepoDataSoruce {
+interface Repo {
 
     suspend fun getAllCurrencies():Flow<ApiResult<CurrencyDto>>
 

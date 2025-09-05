@@ -1,6 +1,7 @@
 package com.example.currencyconverter.data.utils
 
 import android.widget.TimePicker
+import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -8,12 +9,18 @@ import kotlinx.coroutines.flow.flow
 fun <T> safeCallApi(callApi:suspend ()->T): Flow<ApiResult<T>> {
     return flow{
         try {
-            ApiResult.Loading
+            emit(ApiResult.Loading)
             val response = callApi.invoke()
-            ApiResult.Success(response)
+            emit(ApiResult.Success(response))
         }
         catch (exception:Exception){
-            ApiResult.Error(exception)
+            emit(ApiResult.Error(exception))
         }
+    }
+}
+
+fun getSerializedNames(clazz: Class<*>): List<String> {
+    return clazz.declaredFields.mapNotNull { field ->
+        field.getAnnotation(SerializedName::class.java)?.value
     }
 }
