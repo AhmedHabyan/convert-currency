@@ -30,6 +30,9 @@ class ActivityViewModel @Inject constructor(
     private var _converterUiState = MutableStateFlow<UiState>(UiState.Ideal)
     val converterUiState = _converterUiState
 
+    private var _historyUiState = MutableStateFlow<UiState>(UiState.Ideal)
+    val historyUiState = _historyUiState
+
 
     fun getAllCurrencies(){
         viewModelScope.launch(Dispatchers.IO) {
@@ -81,9 +84,26 @@ class ActivityViewModel @Inject constructor(
 
 
     fun insertTransaction(transactionDto: TransactionDto){
-        Log.e("transaction insert","yes")
         viewModelScope.launch(Dispatchers.IO) {
             repo.insertTransaction(transactionDto)
+        }
+    }
+
+    fun getAllTransactions(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.getAllTransactions().collect{
+                when(it){
+                    is ApiResult.Error -> {
+                        historyUiState.value= UiState.Error(it.error)
+                    }
+                    is ApiResult.Loading -> {
+                        historyUiState.value= UiState.Loading
+                    }
+                    is ApiResult.Success -> {
+                        historyUiState.value= UiState.Success(it.response)
+                    }
+                }
+            }
         }
     }
 

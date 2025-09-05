@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.FragmentConverterBinding
 import com.example.currencyconverter.domain.model.CurrencyDto
@@ -20,6 +21,7 @@ import com.example.currencyconverter.domain.model.TransactionDto
 import com.example.currencyconverter.ui.Constants
 import com.example.currencyconverter.ui.utils.UiState
 import com.example.currencyconverter.ui.utils.clearVisiblity
+import com.example.currencyconverter.ui.utils.navigateSafe
 import com.example.currencyconverter.ui.utils.setVisiblity
 import com.example.currencyconverter.ui.utils.showErrorDialog
 import com.example.currencyconverter.ui.viewmodel.ActivityViewModel
@@ -65,12 +67,20 @@ class ConverterFragment : Fragment() {
 
         onSwapClicked()
 
+        onHistoryButtonClicked()
+
         onAmountEditTextChanged()
 
 
 
 
 
+    }
+
+    private fun onHistoryButtonClicked() {
+        binding.btnHistory.setOnClickListener{
+            findNavController().navigateSafe(R.id.action_converterFragment_to_historyFragment)
+        }
     }
 
     private fun onAmountEditTextChanged() {

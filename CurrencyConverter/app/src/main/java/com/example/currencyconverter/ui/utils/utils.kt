@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.navigation.NavController
 import androidx.transition.Visibility
 
 
@@ -14,6 +15,12 @@ fun View.setVisiblity(){
 
 fun View.clearVisiblity(){
     isVisible=false
+}
+
+fun NavController.navigateSafe(destinationId:Int){
+    if(currentDestination?.id != destinationId){
+        navigate(destinationId)
+    }
 }
 
 fun showErrorDialog(
