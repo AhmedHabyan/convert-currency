@@ -11,4 +11,7 @@ object Constants {
     const val CANCEL = "cancel"
 
     const val REFRESH = "refresh"
+
+    const val SUCCESS = "success"
+    const val FAIL = "fail"
 }

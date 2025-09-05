@@ -15,13 +15,17 @@ data class TransactionEntity (
     val amountFrom:String?,
 
     @ColumnInfo("amountTo")
-    val amountTo:String?
+    val amountTo:String?,
+
+    @ColumnInfo("status")
+    val status:String?
 
     ){
     fun toTransactionDto():TransactionDto{
         return TransactionDto(
             amountFrom=amountFrom,
-            amountTo=amountTo
+            amountTo=amountTo,
+            status= status
         )
     }
 }

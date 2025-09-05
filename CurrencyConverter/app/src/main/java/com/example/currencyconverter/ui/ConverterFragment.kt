@@ -140,6 +140,7 @@ class ConverterFragment : Fragment() {
                 viewModel.converterUiState.collect {
                     when (it) {
                         is UiState.Error -> {
+
                             showErrorDialog(
                                 context = requireContext(),
                                 message = it.exception.message ?: Constants.GENERAL_ERROR,
@@ -153,6 +154,13 @@ class ConverterFragment : Fragment() {
                                 },
                                 negativeButtonText = Constants.CANCEL
 
+                            )
+                            viewModel.insertTransaction(
+                                TransactionDto(
+                                    amountFrom = "${binding.amountEditText.text} ${binding.autoCompleteFrom.text}",
+                                    amountTo = "${binding.convertedEditText.text} ${binding.autoCompleteTo.text}",
+                                    status = Constants.FAIL
+                                )
                             )
                             binding.converterProgressBar.clearVisiblity()
                         }
@@ -170,7 +178,8 @@ class ConverterFragment : Fragment() {
                             viewModel.insertTransaction(
                                 TransactionDto(
                                     amountFrom = "${binding.amountEditText.text} ${binding.autoCompleteFrom.text}",
-                                    amountTo = "${binding.convertedEditText.text} ${binding.autoCompleteTo.text}"
+                                    amountTo = "${binding.convertedEditText.text} ${binding.autoCompleteTo.text}",
+                                    status = Constants.SUCCESS
                                 )
                             )
 
