@@ -21,7 +21,7 @@ class RepoImpl @Inject constructor(
         return  safeCallApi { remoteDataSource.getAllCurrencies().toCurrencyDto()}
     }
 
-    @OptIn(FlowPreview::class)
+
     override suspend fun getCurrencyConversion(
         base:String,
         symbol:String
