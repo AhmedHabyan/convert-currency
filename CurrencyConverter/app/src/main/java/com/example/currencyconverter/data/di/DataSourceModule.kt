@@ -1,4 +1,4 @@
-package com.example.currencyconverter.data.datasource.di
+package com.example.currencyconverter.data.di
 
 import com.example.currencyconverter.data.datasource.remotedatasource.RemoteDataSourceImpl
 import com.example.currencyconverter.data.datasource.repository.RepoImpl
@@ -20,7 +20,6 @@ object DataSourceModule {
 
 
     @Provides
-    @Singleton
     fun provideRepoDataSource(
         remoteDataSource: RemoteDataSource,
         localDataSource: LocalDataSource

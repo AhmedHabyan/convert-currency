@@ -87,13 +87,19 @@ class ConverterFragment : Fragment() {
         binding.amountEditText.addTextChangedListener(
             object :TextWatcher{
                 override fun afterTextChanged(p0: Editable?) {
-                    if(!p0.isNullOrEmpty()) {
-                        viewModel.calculateAmountConversion(
-                            base = binding.autoCompleteFrom.text.toString(),
-                            symbol = binding.autoCompleteTo.text.toString(),
-                            amount = p0.toString()
-                        )
+                    p0?.let {
+                        if(it.toString().isNotEmpty() && it.toString().toInt()<=0){
+                            binding.amountEditText.setText("")
+                        }
+                        else if(it.isNotEmpty()) {
+                            viewModel.calculateAmountConversion(
+                                base = binding.autoCompleteFrom.text.toString(),
+                                symbol = binding.autoCompleteTo.text.toString(),
+                                amount = p0.toString()
+                            )
+                        }
                     }
+
                 }
 
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
