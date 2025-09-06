@@ -1,7 +1,7 @@
 package com.example.currencyconverter.data.datasource.di
 
 import com.example.currencyconverter.data.datasource.remotedatasource.RemoteDataSourceImpl
-import com.example.currencyconverter.data.datasource.RepoImpl
+import com.example.currencyconverter.data.datasource.repository.RepoImpl
 import com.example.currencyconverter.data.datasource.localdatasource.LocalDataSourceImpl
 import com.example.currencyconverter.data.datasource.localdatasource.database.TransactionDao
 import com.example.currencyconverter.data.network.webservice.WebService

@@ -1,10 +1,11 @@
-package com.example.currencyconverter
+package com.example.currencyconverter.ui
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.currencyconverter.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
